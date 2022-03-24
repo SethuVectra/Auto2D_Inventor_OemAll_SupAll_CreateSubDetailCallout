@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD.InventorOperations" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgQAAAAAAAAAAAAQUAAAAAAAAAAgAAABAAAAAAA=</HashCode>
+      <FileName>Class Files\CAD\InventorOperations.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CalloutConfig.CalloutDetails">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Class Files\CalloutConfig\CalloutDetails.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CalloutConfig.Division" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Class Files\CalloutConfig\Division.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CalloutConfig.InputType">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Class Files\CalloutConfig\InputType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CalloutConfig.Oem" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Class Files\CalloutConfig\Oem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CalloutConfig.PartListColumn" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAGACAAAAAA=</HashCode>
+      <FileName>Class Files\CalloutConfig\PartListColumn.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CalloutConfig.PartListColumns">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Class Files\CalloutConfig\PartListColumns.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CalloutConfig.Supplier" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAABAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Class Files\CalloutConfig\Supplier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CalloutConfig.TableData" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Class Files\CalloutConfig\TableData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CalloutConfig.TableSettings" Collapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AASAFAAAAAAAAAAAAAAAAAAAECIAAAABAAgAAAAAAAA=</HashCode>
+      <FileName>Class Files\CalloutConfig\TableSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CalloutDetailsReader" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABABAAAAAAAAAAAAAAABAAAAAQAgAAAAAAAA=</HashCode>
+      <FileName>Class Files\CalloutDetailsReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.VctBalloon" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAEQBIAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Class Files\VctBalloon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.VctBalloonCallout" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAEAAAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Class Files\VctBalloonCallout.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.VctBalloons" Collapsed="true">
+    <Position X="4" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAQAAAAAAAAAAAQAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>Class Files\VctBalloons.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.VctPartList" Collapsed="true">
+    <Position X="5.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAgAAAgAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Class Files\VctPartList.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Program" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD.ICADOperations" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgQAAAAAAAAAAAAQUAAAAAAAAAAgAAABAAAAAAA=</HashCode>
+      <FileName>Class Files\CAD\ICADOperations.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.VctBalloonZone" Collapsed="true">
+    <Position X="0.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAIAAAACACAAAAAAAA=</HashCode>
+      <FileName>Class Files\VctBalloonZone.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CalloutDetails>
+	<Oem Name="GM">
+		<Supplier Name ="VALIANT">
+			<Division Name ="N/A">
+				<InputType Name ="PartNumber">
+					<TableSettings BOMView="PartList/Structured" Levels="AllLevels" Delimeter="."
+								Numbering="Numeric/Alpha" MinDigits="1"
+								TextWrapingDirection="Left/Right" AutomaticWrap="True/False"
+							   MaximumRows ="10" NumberOfSections="1">
+					</TableSettings>
+					<TableData>
+						<PartListColumns>
+							<PartListColumn Number="" HeaderText="" SourceType="" SourceValue=""/>
+							<PartListColumn Number="" HeaderText="" SourceType="" SourceValue=""/>
+							<PartListColumn Number="" HeaderText="" SourceType="" SourceValue=""/>
+						</PartListColumns>
+					</TableData>
+				</InputType>
+				<InputType Name ="IProperty">
+					<TableSettings BOMView="PartList/Structured" Levels="AllLevels" Delimeter="."
+								Numbering="Numeric/Alpha" MinDigits="1"
+								TextWrapingDirection="Left/Right" AutomaticWrap="True/False"
+							   MaximumRows ="10" NumberOfSections="1">
+					</TableSettings>
+					<TableData>
+						<PartListColumns>
+							<PartListColumn Number="" HeaderText="" SourceType="" SourceValue=""/>
+							<PartListColumn Number="" HeaderText="" SourceType="" SourceValue=""/>
+							<PartListColumn Number="" HeaderText="" SourceType="" SourceValue=""/>
+						</PartListColumns>
+					</TableData>
+				</InputType>
+			</Division>
+		</Supplier>
+	</Oem>
+</CalloutDetails>
+

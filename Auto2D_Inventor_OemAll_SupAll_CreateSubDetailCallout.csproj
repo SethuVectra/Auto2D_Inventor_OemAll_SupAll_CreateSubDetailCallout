@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8154F848-E68B-493B-BA10-AD456C6160A7}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout</RootNamespace>
+    <AssemblyName>Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class Files\CAD\ICADOperations.cs" />
+    <Compile Include="Class Files\CAD\InventorOperations.cs" />
+    <Compile Include="Class Files\CalloutConfig\CalloutDetails.cs" />
+    <Compile Include="Class Files\CalloutConfig\Division.cs" />
+    <Compile Include="Class Files\CalloutConfig\InputType.cs" />
+    <Compile Include="Class Files\CalloutConfig\Oem.cs" />
+    <Compile Include="Class Files\CalloutConfig\PartListColumn.cs" />
+    <Compile Include="Class Files\CalloutConfig\PartListColumns.cs" />
+    <Compile Include="Class Files\CalloutConfig\Supplier.cs" />
+    <Compile Include="Class Files\CalloutConfig\TableData.cs" />
+    <Compile Include="Class Files\CalloutConfig\TableSettings.cs" />
+    <Compile Include="Class Files\CalloutDetailsReader.cs" />
+    <Compile Include="Class Files\VctBalloon.cs" />
+    <Compile Include="Class Files\VctBalloonCallout.cs" />
+    <Compile Include="Class Files\VctBalloons.cs" />
+    <Compile Include="Class Files\VctBalloonZone.cs" />
+    <Compile Include="Class Files\VctPartList.cs" />
+    <Compile Include="Class Files\XmlHelper.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="BalloonCallout.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CalloutDetails.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Inventor">
+      <Guid>{D98A091D-3A0F-4C3E-B36E-61F62068D488}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="stdole">
+      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
