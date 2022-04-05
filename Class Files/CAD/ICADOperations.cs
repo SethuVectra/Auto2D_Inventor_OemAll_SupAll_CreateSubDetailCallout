@@ -8,6 +8,7 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
 {
     public interface ICADOperations
     {
+        
         bool StartApplication();        
         List<string> GetDrawingFilePaths();
         bool UpdateSettings(CalloutConfig.InputType CalloutDetails);
