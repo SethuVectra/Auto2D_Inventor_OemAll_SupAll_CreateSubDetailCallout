@@ -13,7 +13,7 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.Callo
 	{
 
 		[XmlAttribute(AttributeName = "BOMView")]
-		public string BOMView { get; set; }
+		public string BomView { get; set; }
 
 		[XmlAttribute(AttributeName = "Levels")]
 		public string Levels { get; set; }

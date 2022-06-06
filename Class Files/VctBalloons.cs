@@ -9,7 +9,7 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
     public class VctBalloons
     {
 
-        public VctBalloons(object PartList)
+        public VctBalloons(object partList)
         {
 
         }
@@ -27,9 +27,9 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
         {
             return false;
         }
-        public static void testc()
+        public static void Testc()
         {
-            CAD.ICADOperations cADOperations = new CAD.InventorOperations();
+            CAD.ICadOperations cAdOperations = new CAD.InventorOperations();
         }
     }
 }

@@ -4,12 +4,16 @@
 		<Supplier Name ="VALIANT">
 			<Division Name ="N/A">
 				<InputType Name ="PartNumber">
+					<!--BorderOffset in mm-->
+					<GeneralSettings BalloonStyle ="Balloon (GM VG2.0)" PartListType ="Valiant DWG Weldment Parts List (GM VG2.0)"
+					         BorderOffset ="15" >
+					</GeneralSettings>
 					<TableSettings BOMView="PartList/Structured" Levels="AllLevels" Delimeter="."
-								Numbering="Numeric/Alpha" MinDigits="1"
-								TextWrapingDirection="Left/Right" AutomaticWrap="True/False"
-							   MaximumRows ="10" NumberOfSections="1">
+					               Numbering="Numeric/Alpha" MinDigits="1"
+					               TextWrapingDirection="Left/Right" AutomaticWrap="True/False"
+					               MaximumRows ="10" NumberOfSections="1">
 					</TableSettings>
-					<TableData>
+					<TableData PartListTopLeftPositionX ="0" PartListTopLeftPositionY ="0">
 						<PartListColumns>
 							<PartListColumn Number="" HeaderText="" SourceType="" SourceValue=""/>
 							<PartListColumn Number="" HeaderText="" SourceType="" SourceValue=""/>
@@ -18,12 +22,15 @@
 					</TableData>
 				</InputType>
 				<InputType Name ="IProperty">
+					<GeneralSettings BalloonStyle ="Balloon (GM VG2.0)" PartListType ="Valiant DWG Weldment Parts List (GM VG2.0)"
+					                 BorderOffset ="15" >
+					</GeneralSettings>
 					<TableSettings BOMView="PartList/Structured" Levels="AllLevels" Delimeter="."
-								Numbering="Numeric/Alpha" MinDigits="1"
-								TextWrapingDirection="Left/Right" AutomaticWrap="True/False"
-							   MaximumRows ="10" NumberOfSections="1">
+					               Numbering="Numeric/Alpha" MinDigits="1"
+					               TextWrapingDirection="Left/Right" AutomaticWrap="True/False"
+					               MaximumRows ="10" NumberOfSections="1">
 					</TableSettings>
-					<TableData>
+					<TableData PartListTopLeftPositionX ="0" PartListTopLeftPositionY ="0">
 						<PartListColumns>
 							<PartListColumn Number="" HeaderText="" SourceType="" SourceValue=""/>
 							<PartListColumn Number="" HeaderText="" SourceType="" SourceValue=""/>

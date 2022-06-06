@@ -11,19 +11,19 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
     {
         private CalloutDetailsReader()
         {
-            ReadCalloutDetails = XmlHelper.DeserializeXMLFileToObject<CalloutDetails>(System.IO.Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "CalloutDetails.xml"));
+            ReadCalloutDetails = XmlHelper.DeserializeXmlFileToObject<CalloutDetails>(System.IO.Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "CalloutDetails.xml"));
         }
 
-        private static CalloutDetailsReader instance;
+        private static CalloutDetailsReader _instance;
         public static CalloutDetailsReader Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = new CalloutDetailsReader();
+                    _instance = new CalloutDetailsReader();
                 }
-                return instance;
+                return _instance;
             }
         }
 
@@ -33,7 +33,7 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
         {
             try
             {
-                instance = new CalloutDetailsReader();
+                _instance = new CalloutDetailsReader();
             }
             catch
             {
@@ -42,7 +42,7 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
             return true;
         }
 
-        public InputType GetBallonCalloutsDetails(string Oem, string Supplier, string Division)
+        public InputType GetBallonCalloutsDetails(string oem, string supplier, string division)
         {
             if (ReadCalloutDetails == null) return null;
             return null;

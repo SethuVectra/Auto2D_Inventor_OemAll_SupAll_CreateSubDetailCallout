@@ -10,14 +10,14 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
 {
     public class XmlHelper
     {
-        public static T DeserializeXMLFileToObject<T>(string XmlFilename)
+        public static T DeserializeXmlFileToObject<T>(string xmlFilename)
         {
             T returnObject = default(T);
-            if (string.IsNullOrEmpty(XmlFilename)) return default(T);
+            if (string.IsNullOrEmpty(xmlFilename)) return default(T);
 
             try
             {
-                StreamReader xmlStream = new StreamReader(XmlFilename);
+                StreamReader xmlStream = new StreamReader(xmlFilename);
                 XmlSerializer serializer = new XmlSerializer(typeof(T));
                 returnObject = (T)serializer.Deserialize(xmlStream);
             }

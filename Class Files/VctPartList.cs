@@ -9,7 +9,7 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
 {
     public class VctPartList
     {
-        public VctPartList(string FilePath, object View, string Oem, string Supplier, string Division)
+        public VctPartList(string filePath, object view, string oem, string supplier, string division)
         {
 
         }

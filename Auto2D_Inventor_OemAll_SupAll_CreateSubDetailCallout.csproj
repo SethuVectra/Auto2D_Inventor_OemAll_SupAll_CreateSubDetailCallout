@@ -43,10 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class Files\CAD\ForReference.cs" />
     <Compile Include="Class Files\CAD\ICADOperations.cs" />
     <Compile Include="Class Files\CAD\InventorOperations.cs" />
+    <Compile Include="Class Files\CAD\PheiperalCurve.cs" />
     <Compile Include="Class Files\CalloutConfig\CalloutDetails.cs" />
     <Compile Include="Class Files\CalloutConfig\Division.cs" />
+    <Compile Include="Class Files\CalloutConfig\GeneralSettings.cs" />
     <Compile Include="Class Files\CalloutConfig\InputType.cs" />
     <Compile Include="Class Files\CalloutConfig\Oem.cs" />
     <Compile Include="Class Files\CalloutConfig\PartListColumn.cs" />
@@ -55,6 +58,8 @@
     <Compile Include="Class Files\CalloutConfig\TableData.cs" />
     <Compile Include="Class Files\CalloutConfig\TableSettings.cs" />
     <Compile Include="Class Files\CalloutDetailsReader.cs" />
+    <Compile Include="Class Files\LogWriter.cs" />
+    <Compile Include="Class Files\StaticVariables.cs" />
     <Compile Include="Class Files\VctBalloon.cs" />
     <Compile Include="Class Files\VctBalloonCallout.cs" />
     <Compile Include="Class Files\VctBalloons.cs" />

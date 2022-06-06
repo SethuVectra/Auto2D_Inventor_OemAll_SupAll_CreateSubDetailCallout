@@ -11,6 +11,8 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.Callo
     [XmlRoot(ElementName = "InputType")]
     public class InputType
     {
+        [XmlElement(ElementName = "GeneralSettings")]
+        public GeneralSettings GeneralSettings { get; set; }
 
         [XmlElement(ElementName = "TableSettings")]
         public TableSettings TableSettings { get; set; }
