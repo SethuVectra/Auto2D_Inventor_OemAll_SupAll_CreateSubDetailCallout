@@ -10,11 +10,9 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
     {
         
         bool StartApplication();        
-        List<string> GetDrawingFilePaths();
-        bool UpdateSettings(CalloutConfig.InputType calloutDetails);
+        List<string> GetDrawingFilePaths(string path);
+        bool UpdateSettings(string filepath,CalloutConfig.InputType calloutDetails);
         bool DeletePartList();
-
-        object GetView();
         object PlacePartList();
         bool PlaceBalloonCallouts(object partList, VctBalloons vctBalloons);
 

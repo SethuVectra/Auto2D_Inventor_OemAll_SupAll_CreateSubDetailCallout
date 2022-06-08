@@ -10,7 +10,6 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
 {
     public class InventorOperations : ICadOperations
     {
-        string _viewName = "B_LCS";
         private Inventor.Application _application;
         private PartsListLevelEnum _partsListLevelEnum;
         private TransientGeometry _transGeom;
@@ -33,45 +32,80 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
         private Sheet _activeSheet;
         private Sheet ActiveSheet => _activeSheet ?? (_activeSheet = (_application.ActiveDocument as DrawingDocument).ActiveSheet);
 
-        public List<string> GetDrawingFilePaths()
+        public List<string> GetDrawingFilePaths(string path)
         {
-            throw new NotImplementedException();
+            List<string> files = new List<string>();
+            foreach (string item in System.IO.Directory.GetFiles(path, "*.iam", System.IO.SearchOption.AllDirectories))
+            {
+                if (IsWeldedAssembly(item))
+                    files.Add(item);
+            }
+
+            return files;
         }
 
-        public object GetView()
+        public bool IsWeldedAssembly(Document assembly)
         {
-            if (_application == null) return null;
-            foreach (DrawingView item in ActiveSheet.DrawingViews)
+            if (assembly is AssemblyDocument)
             {
-                if (item.Name == _viewName) return item;
+                if (InventorApi.VctApplication.InventorSession.GetCustomIProperty(assembly, StaticVariables.PartType)
+                    .Equals(StaticVariables.WeldedAssembly))
+                    return true;
+                //assembly.Close();
             }
-            return null;
+
+            return false;
+        }
+
+        public bool IsWeldedAssembly(string filepath)
+        {
+            Document assembly = _application.Documents.Open(filepath, false);
+            return IsWeldedAssembly(assembly);
+        }
+
+        private DrawingView _view;
+        public DrawingView View
+        {
+            get
+            {
+                if (_view == null)
+                    foreach (DrawingView item in ActiveSheet.DrawingViews)
+                        if (item.Name == StaticVariables.ViewName)
+                        {
+                            _view = item;
+                            if (_view.IsRasterView)
+                                _view.IsRasterView = false;
+                        }
+
+                return _view;
+            }
+
         }
 
         public bool PlaceBalloonCallouts(object partList, VctBalloons vctBalloons)
         {
-            StartApplication();
+            //    StartApplication();   
 
-            DrawingView view = (DrawingView)GetView();
-            if (view == null)
-            {
-                LogWriter.LogWrite("B_LCS View is not placed. Please place view with the name B_LCS before proceed");
-                return false;
-            }
-            AddBallonToView(view);
-            foreach (VctBalloon vctBalloon in vctBalloons.BalloonCallouts)
-            {
-                ObjectCollection pointCollection = _application.TransientObjects.CreateObjectCollection();
-                pointCollection.Add(vctBalloon.LeaderPoint);
-                pointCollection.Add(ActiveSheet.CreateGeometryIntent(vctBalloon.DrawingCurve));
-                Balloon balloon = ActiveSheet.Balloons.Add(pointCollection);
-            }
+            //    DrawingView view = (DrawingView)GetView();
+            //    if (view == null)
+            //    {
+            //        LogWriter.LogWrite("B_LCS View is not placed. Please place view with the name B_LCS before proceed");
+            //        return false;
+            //    } 
+            //    AddBallonToView(view);
+            //    foreach (VctBalloon vctBalloon in vctBalloons.BalloonCallouts)
+            //    {
+            //        ObjectCollection pointCollection = _application.TransientObjects.CreateObjectCollection();
+            //        pointCollection.Add(vctBalloon.LeaderPoint);
+            //        pointCollection.Add(ActiveSheet.CreateGeometryIntent(vctBalloon.DrawingCurve));
+            //        Balloon balloon = ActiveSheet.Balloons.Add(pointCollection);
+            //    }
             return true;
         }
 
         public object PlacePartList(string partListName, double positionX, double positionY)
         {
-            PartsList partsList = ActiveSheet.PartsLists.Add(GetView(), _application.TransientGeometry.CreatePoint2d(positionX, positionY));
+            partsList = ActiveSheet.PartsLists.Add(View, _application.TransientGeometry.CreatePoint2d(positionX, positionY));
 
             foreach (PartsListStyle item in (ActiveSheet.Parent as DrawingDocument).StylesManager.PartsListStyles)
             {
@@ -82,6 +116,17 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
             return partsList;
         }
 
+        public List<string> GetOpenedModels()
+        {
+            List<string> drawings = new List<string>();
+            foreach (_Document document in _application.Documents)
+            {
+                if (IsWeldedAssembly(document))
+                    drawings.Add(document.FullDocumentName);
+            }
+
+            return drawings;
+        }
         public bool StartApplication()
         {
             try
@@ -109,9 +154,9 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
 
             return true;
         }
-        public bool UpdateSettings(InputType calloutDetails)
+        public bool UpdateSettings(string filepath, InputType calloutDetails)
         {
-            Inventor.Document oDocument = _application.ActiveDocument;
+            Inventor.Document oDocument = _application.Documents.ItemByName[filepath];
             AssemblyDocument oAssemblyDocument = oDocument as AssemblyDocument;
             if (oAssemblyDocument == null) return false;
 
@@ -136,7 +181,7 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
                     _partsListLevelEnum = PartsListLevelEnum.kStructuredAllLevels;
             }
 
-            DrawingDocument oDrawingDocument = oDocument as DrawingDocument;
+            DrawingDocument oDrawingDocument =_application.Documents.ItemByName[ System.IO.Path.ChangeExtension(filepath,".idw")] as draw;
             if (oDrawingDocument == null) return false;
 
             PartsList partlist = oDrawingDocument.Sheets[0].PartsLists[0];
@@ -167,64 +212,65 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
 
         private Vector2d XAxis { get; set; }
 
-        internal void AddBallonToView(DrawingView view)
+        private PartsList partsList;
+        public bool IsPartslistPlaced => partsList != null;
+        internal List<VctBalloon> AddBallonToView()
         {
-            if (view.IsRasterView)
-                view.IsRasterView = false;
-            if (!DeletePartList()) return;
+            List<VctBalloon> Balloons = new List<VctBalloon>();
 
-            PartsList partsList = PlacePartList("Valiant DWG Weldment Parts List (GM VG2.0)", ActiveSheet.Width - 1, ActiveSheet.Height - 1) as PartsList;
-
-            InitialiseViewBoundingBox(view);
-            DeleteBalloons(view);
+            InitialiseViewBoundingBox();
+            DeleteBalloons();
 
             foreach (PartsListRow row in partsList.PartsListRows)
             {
                 if (!row.Ballooned)
-                    CreateRowItemBalloon(row, view);
+                {
+                    VctBalloon vctBalloon = CreateRowItemBalloon(row);
+                    if (vctBalloon != null)
+                        Balloons.Add(vctBalloon);
+                }
             }
-            //ArrangeBalloonsOnView(View);
+            return Balloons;
         }
 
-        private void InitialiseViewBoundingBox(DrawingView dView)
+        private void InitialiseViewBoundingBox()
         {
             double offset = 1.5;
-            Point2d topLeft = _transGeom.CreatePoint2d(dView.Left - offset, dView.Top + offset);
-            Point2d topRight = _transGeom.CreatePoint2d(dView.Left + dView.Width + offset, dView.Top + offset);
-            Point2d btmLeft = _transGeom.CreatePoint2d(dView.Left - offset, dView.Top - dView.Height - offset);
-            Point2d btmRight = _transGeom.CreatePoint2d(dView.Left + dView.Width + offset, dView.Top - dView.Height - offset);
+            Point2d topLeft = _transGeom.CreatePoint2d(View.Left - offset, View.Top + offset);
+            Point2d topRight = _transGeom.CreatePoint2d(View.Left + View.Width + offset, View.Top + offset);
+            Point2d btmLeft = _transGeom.CreatePoint2d(View.Left - offset, View.Top - View.Height - offset);
+            Point2d btmRight = _transGeom.CreatePoint2d(View.Left + View.Width + offset, View.Top - View.Height - offset);
 
             TopLine = _transGeom.CreateLineSegment2d(topLeft, topRight);
             BtmLine = _transGeom.CreateLineSegment2d(btmLeft, btmRight);
             LeftLine = _transGeom.CreateLineSegment2d(topLeft, btmLeft);
             RightLine = _transGeom.CreateLineSegment2d(topRight, btmRight);
 
-            XAxis = dView.Center.VectorTo(_transGeom.CreatePoint2d(dView.Left + dView.Width + offset - dView.Center.Y));
+            XAxis = View.Center.VectorTo(_transGeom.CreatePoint2d(View.Left + View.Width + offset - View.Center.Y));
         }
 
-        private void DeleteBalloons(DrawingView view)
+        private void DeleteBalloons()
         {
-            foreach (Balloon balloon in view.Parent.Balloons)
+            foreach (Balloon balloon in View.Parent.Balloons)
             {
                 balloon.Delete();
             }
         }
 
-        private void CreateRowItemBalloon(PartsListRow item, DrawingView view)
+        private VctBalloon CreateRowItemBalloon(PartsListRow item)
         {
-            Point2d balloonPositionPt = GetBalloonAttachGeometry(item, view, out GeometryIntent curveAttachPt); ;
+            Point2d balloonPositionPt = GetBalloonAttachGeometry(item, View, out GeometryIntent curveAttachPt); ;
             ObjectCollection leaderPoints = _application.TransientObjects.CreateObjectCollection();
 
-            if (balloonPositionPt == null) return;
+            if (balloonPositionPt == null) return null;
             leaderPoints.Add(balloonPositionPt);
             leaderPoints.Add(curveAttachPt);
 
-            Balloon balloon = view.Parent.Balloons.Add(leaderPoints);
+            Balloon balloon = View.Parent.Balloons.Add(leaderPoints);
             UpdateBalloonItem(balloon);
 
+            return new VctBalloon();
         }
-
-        //int overridevalue = 1;
         public void UpdateBalloonItem(Balloon balloon)
         {
             BalloonValueSet balloonValueSet = balloon.BalloonValueSets[1];
@@ -233,8 +279,6 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
             //balloonValueSet.OverrideValue = overridevalue.ToString();
             //overridevalue++;
         }
-
-
 
         private Point2d GetBalloonPosition(Point2d attachPoint, DrawingView view)
         {
@@ -265,23 +309,6 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
             {
                 balloonPtLine = RightLine;
             }
-            //if (Angle >= 45 && Angle < 135)
-            //{
-            //    BalloonPtLine = _topLine;
-            //}
-            //else if (Angle >= 135 && Angle < 225)
-            //{
-            //    BalloonPtLine = _leftLine;
-            //}
-            //else if (Angle >= 225 && Angle < 315)
-            //{
-            //    BalloonPtLine = _btmLine;
-            //}
-            //else
-            //{
-            //    BalloonPtLine = _rightLine;
-            //}
-
 
             // Line AB represented as a1x + b1y = c1 
             if (balloonPtLine != null)
@@ -311,47 +338,51 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
                 }
             }
 
+            #region Getquadrant
 
-            switch (GetQuadrant(attachPoint, view))
-            {
-                case "Top":
-                    {
-                        leaderPoint.Y = view.Top + _blnViewMargin;
-                        translationRatio = (leaderPoint.Y - view.Center.Y) / (attachPoint.Y - view.Center.Y);
-                        leaderPoint.X = view.Center.X + (attachPoint.X - view.Center.X) * translationRatio;
-                        break;
-                    }
 
-                case "Bottom":
-                    {
-                        leaderPoint.Y = view.Top - view.Height - _blnViewMargin;
-                        translationRatio = (leaderPoint.Y - view.Center.Y) / (attachPoint.Y - view.Center.Y);
-                        leaderPoint.X = view.Center.X + (attachPoint.X - view.Center.X) * translationRatio;
-                        break;
-                    }
 
-                case "Left":
-                    {
-                        leaderPoint.X = view.Left - _blnViewMargin;
-                        translationRatio = (leaderPoint.X - view.Center.X) / (attachPoint.X - view.Center.X);
-                        leaderPoint.Y = view.Center.Y + (attachPoint.Y - view.Center.Y) * translationRatio;
-                        break;
-                    }
 
-                case "Right":
-                    {
-                        leaderPoint.X = view.Left + view.Width + _blnViewMargin;
-                        translationRatio = (leaderPoint.X - view.Center.X) / (attachPoint.X - view.Center.X);
-                        leaderPoint.Y = view.Center.Y + (attachPoint.Y - view.Center.Y) * translationRatio;
-                        break;
-                    }
+            //switch (GetQuadrant(attachPoint, view))
+            //{
+            //    case "Top":
+            //        {
+            //            leaderPoint.Y = view.Top + _blnViewMargin;
+            //            translationRatio = (leaderPoint.Y - view.Center.Y) / (attachPoint.Y - view.Center.Y);
+            //            leaderPoint.X = view.Center.X + (attachPoint.X - view.Center.X) * translationRatio;
+            //            break;
+            //        }
 
-                case "Quadrant not Found":
-                    {
-                        return default;
-                    }
-            }
+            //    case "Bottom":
+            //        {
+            //            leaderPoint.Y = view.Top - view.Height - _blnViewMargin;
+            //            translationRatio = (leaderPoint.Y - view.Center.Y) / (attachPoint.Y - view.Center.Y);
+            //            leaderPoint.X = view.Center.X + (attachPoint.X - view.Center.X) * translationRatio;
+            //            break;
+            //        }
 
+            //    case "Left":
+            //        {
+            //            leaderPoint.X = view.Left - _blnViewMargin;
+            //            translationRatio = (leaderPoint.X - view.Center.X) / (attachPoint.X - view.Center.X);
+            //            leaderPoint.Y = view.Center.Y + (attachPoint.Y - view.Center.Y) * translationRatio;
+            //            break;
+            //        }
+
+            //    case "Right":
+            //        {
+            //            leaderPoint.X = view.Left + view.Width + _blnViewMargin;
+            //            translationRatio = (leaderPoint.X - view.Center.X) / (attachPoint.X - view.Center.X);
+            //            leaderPoint.Y = view.Center.Y + (attachPoint.Y - view.Center.Y) * translationRatio;
+            //            break;
+            //        }
+
+            //    case "Quadrant not Found":
+            //        {
+            //            return default;
+            //        }
+            //}
+            #endregion
             return leaderPoint;
         }
 
@@ -435,7 +466,6 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
 
             return true;
         }
-
 
         #endregion
         #region Curves analysis methods
@@ -540,9 +570,6 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
             }
             _peripheralCurves.Add(allSegments);
         }
-
-
-
         private Point2d GetSegmentMidPoint(DrawingCurveSegment segment)
         {
             Curve2dEvaluator curveEval = segment.Geometry.Evaluator;
@@ -555,7 +582,6 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
             return _application.TransientGeometry.CreatePoint2d(midPointCoordinates[0], midPointCoordinates[1]);
         }
 
-        
         private GeometryIntent GetAttachPoint(DrawingCurveSegment segment)
         {
             if (segment is null)

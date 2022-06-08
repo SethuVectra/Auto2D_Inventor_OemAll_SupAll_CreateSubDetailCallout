@@ -9,9 +9,10 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
     public class VctBalloons
     {
 
-        public VctBalloons(object partList)
+        public VctBalloons()
         {
-
+            if (StaticVariables.InventorOperations.IsPartslistPlaced)
+                PlaceBalloonCallouts();
         }
 
         public List<VctBalloon> BalloonCallouts { get; set; }
@@ -25,11 +26,16 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
 
         public bool PlaceBalloonCallouts()
         {
-            return false;
+            try
+            {
+                StaticVariables.InventorOperations.AddBallonToView();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
-        public static void Testc()
-        {
-            CAD.ICadOperations cAdOperations = new CAD.InventorOperations();
-        }
+        
     }
 }

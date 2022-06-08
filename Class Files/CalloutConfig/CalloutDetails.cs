@@ -14,5 +14,16 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.Callo
 
         [XmlElement(ElementName = "Oem")]
         public List<Oem> Oem { get; set; }
+
+        //public Dictionary<string, Oem> Data { get; set; }
+
+        //public void Update()
+        //{
+        //    foreach (var item in Oem)
+        //    {
+        //        item.Update();
+        //        Data.Add(item.Name, item);
+        //    }
+        //}
     }
 }

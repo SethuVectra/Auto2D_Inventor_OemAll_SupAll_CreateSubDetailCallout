@@ -9,21 +9,32 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
 {
     public class VctPartList
     {
-        public VctPartList(string filePath, object view, string oem, string supplier, string division)
+        public VctPartList(string filePath, InputType callOutDetails)
         {
-
+            this.CallOutDetails = callOutDetails;
+            StaticVariables.InventorOperations.UpdateSettings(filePath, CallOutDetails);
         }
-        public InputType CalloutDetails { get; set; }
+        public InputType CallOutDetails { get; set; }
 
-        public object GetPartList()
+        public void AddPartList()
         {
-            return null;
+            //Delete PartList
+            StaticVariables.InventorOperations.DeletePartList();
+
+            //Insert new PartList
+            StaticVariables.InventorOperations.PlacePartList(CallOutDetails.GeneralSettings.PartListType, CallOutDetails.TableData.PartListTopLeftPositionX, CallOutDetails.TableData.PartListTopLeftPositionY);
+
+            Process();
         }
 
-        public VctBalloons BallonCallouts { get; set; }
+        public VctBalloons BalloonCallOuts { get; set; }
 
         public bool Process()
         {
+            if (StaticVariables.InventorOperations.IsPartslistPlaced)
+            {
+                BalloonCallOuts = new VctBalloons();
+            }
             return false;
         }
     }

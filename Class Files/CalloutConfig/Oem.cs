@@ -17,5 +17,16 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.Callo
 
         [XmlAttribute(AttributeName = "Name")]
         public string Name { get; set; }
+
+        //public Dictionary<string, Supplier> Data { get; set; }
+
+        //public void Update()
+        //{
+        //    foreach (var item in Supplier)
+        //    {
+        //        item.Update();
+        //        Data.Add(item.Name, item);
+        //    }
+        //}
     }
 }

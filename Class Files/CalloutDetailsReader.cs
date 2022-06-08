@@ -7,33 +7,34 @@ using System.Threading.Tasks;
 
 namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
 {
-    public sealed class CalloutDetailsReader
+    public sealed class CallOutDetailsReader
     {
-        private CalloutDetailsReader()
+        private CallOutDetailsReader()
         {
-            ReadCalloutDetails = XmlHelper.DeserializeXmlFileToObject<CalloutDetails>(System.IO.Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "CalloutDetails.xml"));
+            ReadCallOutDetails = XmlHelper.DeserializeXmlFileToObject<CalloutDetails>(System.IO.Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "CalloutDetails.xml"));
+            //ReadCallOutDetails.Update();
         }
 
-        private static CalloutDetailsReader _instance;
-        public static CalloutDetailsReader Instance
+        private static CallOutDetailsReader _instance;
+        public static CallOutDetailsReader Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new CalloutDetailsReader();
+                    _instance = new CallOutDetailsReader();
                 }
                 return _instance;
             }
         }
 
-        private CalloutDetails ReadCalloutDetails { get; }
+        private CalloutDetails ReadCallOutDetails { get; }
 
         public bool Refresh()
         {
             try
             {
-                _instance = new CalloutDetailsReader();
+                _instance = new CallOutDetailsReader();
             }
             catch
             {
@@ -42,9 +43,28 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
             return true;
         }
 
-        public InputType GetBallonCalloutsDetails(string oem, string supplier, string division)
+        public InputType GetBalloonCallOutsDetails(string oem, string supplier, string division)
         {
-            if (ReadCalloutDetails == null) return null;
+            if (ReadCallOutDetails != null)
+            {   
+                var oems = ReadCallOutDetails.Oem.Where(a=>a.Name.Equals(oem,StringComparison.InvariantCultureIgnoreCase));
+                if (oems.Any())
+                {
+                    var suppliers = oems.First().Supplier.Where(a => a.Name.Equals(supplier, StringComparison.InvariantCultureIgnoreCase));
+                    if (suppliers.Any())
+                    {
+                        var divisions = suppliers.First().Division.Where(a => a.Name.Equals(division, StringComparison.InvariantCultureIgnoreCase));
+                        if (divisions.Any())
+                            return divisions.First().InputType[0];
+                        else
+                            LogWriter.LogWrite("Division is not available in the Config file");
+                    }
+                    else
+                        LogWriter.LogWrite("Supplier is not available in the Config file");
+                }
+                else
+                    LogWriter.LogWrite("Oem is not available in the Config file");
+            }
             return null;
         }
     }
