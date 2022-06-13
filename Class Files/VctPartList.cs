@@ -12,7 +12,10 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
         public VctPartList(string filePath, InputType callOutDetails)
         {
             this.CallOutDetails = callOutDetails;
-            StaticVariables.InventorOperations.UpdateSettings(filePath, CallOutDetails);
+            if(StaticVariables.InventorOperations.UpdateSettings(filePath, CallOutDetails))
+                AddPartList();
+            else
+                LogWriter.LogWrite("Unable to find for the Welded Assembly : " + filePath);
         }
         public InputType CallOutDetails { get; set; }
 
@@ -22,7 +25,7 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
             StaticVariables.InventorOperations.DeletePartList();
 
             //Insert new PartList
-            StaticVariables.InventorOperations.PlacePartList(CallOutDetails.GeneralSettings.PartListType, CallOutDetails.TableData.PartListTopLeftPositionX, CallOutDetails.TableData.PartListTopLeftPositionY);
+            StaticVariables.InventorOperations.PlacePartList(CallOutDetails.GeneralSettings.PartListType, CallOutDetails.TableData.PartListTopLeftPositionX, CallOutDetails.TableData.PartListTopLeftPositionY, CallOutDetails.TableSettings);
 
             Process();
         }
