@@ -15,10 +15,7 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.Callo
         [XmlElement(ElementName = "PartListColumns")]
         public PartListColumns PartListColumns { get; set; }
 
-        [XmlAttribute(AttributeName = "PartListTopLeftPositionX")]
-        public int PartListTopLeftPositionX { get; set; }
-
-        [XmlAttribute(AttributeName = "PartListTopLeftPositionY")]
-        public int PartListTopLeftPositionY { get; set; }
+        [XmlElement(ElementName = "Position")]
+        public Position Position { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using Inventor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -91,6 +92,7 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
             get
             {
                 if (_view == null)
+                {
                     foreach (DrawingView item in ActiveSheet.DrawingViews)
                         if (item.Name == StaticVariables.ViewName)
                         {
@@ -98,9 +100,7 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
                             if (_view.IsRasterView)
                                 _view.IsRasterView = false;
                         }
-
-                if (_view == null)
-                {
+                    if (_view != null) return _view;
                     LogWriter.LogWrite("B_LCS View is not placed. Please place view with the name B_LCS before proceed");
                     return null;
                 }
@@ -131,30 +131,57 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
             return true;
         }
 
-        public object PlacePartList(string partListName, double positionX, double positionY, TableSettings tableSettings)
+        private DrawingStylesManager _stylesManager;
+
+        private string GetSheetSize()
+        {
+            switch (ActiveSheet.Size)
+            {
+                case DrawingSheetSizeEnum.kA0DrawingSheetSize:
+                case DrawingSheetSizeEnum.k36x48InDrawingSheetSize:
+                    return "A0";
+                case DrawingSheetSizeEnum.kA1DrawingSheetSize:
+                case DrawingSheetSizeEnum.k24x36InDrawingSheetSize:
+                    return "A1";
+                case DrawingSheetSizeEnum.kA2DrawingSheetSize:
+                case DrawingSheetSizeEnum.k18x24InDrawingSheetSize:
+                    return "A2";
+                case DrawingSheetSizeEnum.kA3DrawingSheetSize:
+                case DrawingSheetSizeEnum.k12x18InDrawingSheetSize:
+                    return "A3";
+                case DrawingSheetSizeEnum.kA4DrawingSheetSize:
+                case DrawingSheetSizeEnum.k9x12InDrawingSheetSize:
+                    return "A4";
+            }
+            return string.Empty;
+        }
+        public object PlacePartList(string partListName, TableData tableData, TableSettings tableSettings)
         {
             if (View == null) return null;
-            partsList = ActiveSheet.PartsLists.Add(View, _application.TransientGeometry.CreatePoint2d(positionX, positionY));
+            double[] position = tableData.Position.GetPosition(GetSheetSize());
+            _partsList = ActiveSheet.PartsLists.Add(View, _application.TransientGeometry.CreatePoint2d(position[0], position[1]));
+            _stylesManager = (ActiveSheet.Parent as DrawingDocument)?.StylesManager;
 
-            foreach (PartsListStyle item in (ActiveSheet.Parent as DrawingDocument).StylesManager.PartsListStyles)
-            {
-                if (item.Name.Equals(partListName, StringComparison.InvariantCultureIgnoreCase))
+            if (_stylesManager?.PartsListStyles != null)
+                foreach (PartsListStyle item in _stylesManager.PartsListStyles)
                 {
-                    partsList.Style = item;
-                    break;
+                    if (item.Name.Equals(partListName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        _partsList.Style = item;
+                        break;
+                    }
                 }
-            }
 
             bool isAutoWrap = Convert.ToBoolean(tableSettings.AutomaticWrap);
-            partsList.WrapAutomatically = isAutoWrap;
-            partsList.WrapLeft = tableSettings.TextWrapingDirection == "Left";
+            _partsList.WrapAutomatically = isAutoWrap;
+            _partsList.WrapLeft = tableSettings.TextWrapingDirection.Equals("Left", StringComparison.InvariantCultureIgnoreCase);
             if (isAutoWrap)
             {
-                partsList.MaximumRows = tableSettings.MaximumRows;
-                partsList.NumberOfSections = tableSettings.NumberOfSections;
+                _partsList.MaximumRows = tableSettings.MaximumRows;
+                _partsList.NumberOfSections = tableSettings.NumberOfSections;
             }
 
-            return partsList;
+            return _partsList;
         }
 
         public List<string> GetOpenedModels()
@@ -203,7 +230,7 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
 
             TableSettings tableSettings = calloutDetails.TableSettings;
             BOM oBom = oAssemblyDocument.ComponentDefinition.BOM;
-
+            _balloonStyle = calloutDetails.GeneralSettings.BalloonStyle;
 
 
             if (tableSettings.BomView == "Parts Only")
@@ -236,15 +263,26 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
             DrawingDocument oDrawingDocument = null;
             string path = System.IO.Path.GetFullPath(fullFilename);
 
+            //try
+            //{
+            //    oDrawingDocument = _application.Documents.ItemByName[System.IO.Path.ChangeExtension(fullFilename, ".dwg")] as DrawingDocument;
+            //    if (oDrawingDocument != null)
+            //        return oDrawingDocument;
+            //    return _application.Documents.Open(System.IO.Path.ChangeExtension(fullFilename, ".dwg")) as DrawingDocument;
+            //}
+            //catch(Exception ex)
+            //{
+            //}
+
             string filename = System.IO.Path.GetFileNameWithoutExtension(fullFilename);
             string drawingFilename = _application.DesignProjectManager.ResolveFile(path, filename + ".dwg");
 
-            if (drawingFilename == "")
+            if (string.IsNullOrEmpty(drawingFilename))
             {
                 drawingFilename = _application.DesignProjectManager.ResolveFile(path, filename + ".idw");
             }
 
-            if (drawingFilename != "")
+            if (!string.IsNullOrEmpty(drawingFilename))
             {
                 oDrawingDocument = _application.Documents.ItemByName[drawingFilename] as DrawingDocument;
                 oDrawingDocument = oDrawingDocument ?? _application.Documents.Open(drawingFilename) as DrawingDocument;
@@ -254,7 +292,7 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
 
 
         #region Auto Balloon
-        private double _blnViewMargin = 2d;
+
         private LineSegment2d TopLine { get; set; }
         private LineSegment2d BtmLine { get; set; }
         private LineSegment2d RightLine { get; set; }
@@ -262,25 +300,32 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
 
         private Vector2d XAxis { get; set; }
 
-        private PartsList partsList;
-        public bool IsPartslistPlaced => partsList != null;
-        internal List<VctBalloon> AddBallonToView()
+        private PartsList _partsList;
+        public bool IsPartsListPlaced => _partsList != null;
+        private string _balloonStyle;
+        internal List<VctBalloon> AddBalloonToView()
         {
-            List<VctBalloon> Balloons = new List<VctBalloon>();
+            List<VctBalloon> balloons = new List<VctBalloon>();
 
             InitialiseViewBoundingBox();
             DeleteBalloons();
 
-            foreach (PartsListRow row in partsList.PartsListRows)
+            ProgressBar progressBar = _application.CreateProgressBar(false, _partsList.PartsListRows.Count + 1, "Sub Detail CallOut");
+            progressBar.Message ="Placing call out for" +  System.IO.Path.GetFileName( _application.ActiveDocument.FullDocumentName);
+
+            foreach (PartsListRow row in _partsList.PartsListRows)
             {
+                progressBar.UpdateProgress();
                 if (!row.Ballooned)
                 {
                     VctBalloon vctBalloon = CreateRowItemBalloon(row);
                     if (vctBalloon != null)
-                        Balloons.Add(vctBalloon);
+                        balloons.Add(vctBalloon);
                 }
             }
-            return Balloons;
+
+            progressBar.Close();
+            return balloons;
         }
 
         private void InitialiseViewBoundingBox()
@@ -317,7 +362,8 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
             leaderPoints.Add(curveAttachPt);
 
             Balloon balloon = View.Parent.Balloons.Add(leaderPoints);
-            //UpdateBalloonItem(balloon);
+            balloon.Style = _stylesManager.BalloonStyles[_balloonStyle];
+            UpdateBalloonItem(balloon);
             BalloonValueSet balloonValueSet = balloon.BalloonValueSets[1];
 
             return new VctBalloon()
@@ -334,8 +380,8 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
         public void UpdateBalloonItem(Balloon balloon)
         {
             BalloonValueSet balloonValueSet = balloon.BalloonValueSets[1];
-            //string str = System.IO.Path.GetFileNameWithoutExtension(balloonValueSet.ReferencedRow.BOMRow.ReferencedFileDescriptor.FullFileName);
-            //balloonValueSet.ReferencedRow.BOMRow.ItemNumber = str.Substring(str.Length - 1);
+            string str = System.IO.Path.GetFileNameWithoutExtension(balloonValueSet.ReferencedRow.BOMRow.ReferencedFileDescriptor.FullFileName);
+            balloonValueSet.ReferencedRow.BOMRow.ItemNumber = str.Substring(str.Length - 1);
             //balloonValueSet.OverrideValue = overridevalue.ToString();
             //overridevalue++;
         }
@@ -465,6 +511,8 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
             //return GetAttachPoint(GetBestSegmentFromOccurrence(OccurrencesCurves));
         }
 
+
+
         private Point2d GetoptimalCurve(DrawingView view, out GeometryIntent intent, out VctBalloonZone quadrant)
         {
             quadrant = VctBalloonZone.NotFound;
@@ -474,9 +522,9 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files.CAD
                 bool overlap = false;
                 intent = GetAttachPoint(item.Segment);
                 Point2d result = GetBalloonPosition(intent.PointOnSheet, view, out quadrant);
-                if (view.Parent.Balloons.Count == 0)
+                if (view.Parent.Balloons.Count == 0 || _peripheralCurves.Items.Last() == item)
                     return result;
-                
+
                 foreach (Balloon balloon in view.Parent.Balloons)
                 {
                     double balloonRadius = balloon.Style.BalloonDiameter / 2;

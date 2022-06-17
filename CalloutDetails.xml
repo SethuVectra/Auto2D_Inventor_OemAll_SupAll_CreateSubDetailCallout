@@ -3,17 +3,27 @@
 	<Oem Name="GM">
 		<Supplier Name ="VALIANT">
 			<Division Name ="N/A">
+				<!--Inputtype is to give input for different Oem in flexible
+				Current we have two types of input Part number and Iproperty which will be used in item number 
+				// For Valiant GM Inputtype is Partnumber-->
 				<InputType Name ="PartNumber">
 					<!--BorderOffset in mm-->
-					<GeneralSettings BalloonStyle ="Balloon (GM VG2.0)" PartListType ="Valiant DWG Weldment Parts List (GM VG2.0)"
+					<GeneralSettings BalloonStyle ="Weldment Balloon (GM VG2.0)" PartListType ="Valiant DWG Weldment Parts List (GM VG2.0)"
 					         BorderOffset ="15" >
 					</GeneralSettings>
 					<TableSettings BOMView="PartList/Structured" Levels="AllLevels" Delimeter="."
 					               Numbering="Numeric/Alpha" MinDigits="1"
-					               TextWrapingDirection="Left/Right" AutomaticWrap="True/False"
+					               TextWrapingDirection="Left" AutomaticWrap="True"
 					               MaximumRows ="10" NumberOfSections="1">
 					</TableSettings>
-					<TableData PartListTopLeftPositionX ="0" PartListTopLeftPositionY ="0">
+					<TableData>
+						<Position>
+							<PositionItem Name ="A0" X ="0" Y="0"/>
+							<PositionItem Name ="A1" X ="0" Y="0"/>
+							<PositionItem Name ="A2" X ="0" Y="0"/>
+							<PositionItem Name ="A3" X ="0" Y="0"/>
+							<PositionItem Name ="A4" X ="0" Y="0"/>
+						</Position>
 						<PartListColumns>
 							<PartListColumn Number="" HeaderText="" SourceType="" SourceValue=""/>
 							<PartListColumn Number="" HeaderText="" SourceType="" SourceValue=""/>
@@ -21,7 +31,7 @@
 						</PartListColumns>
 					</TableData>
 				</InputType>
-				<InputType Name ="IProperty">
+				<!--<InputType Name ="IProperty">
 					<GeneralSettings BalloonStyle ="Balloon (GM VG2.0)" PartListType ="Valiant DWG Weldment Parts List (GM VG2.0)"
 					                 BorderOffset ="15" >
 					</GeneralSettings>
@@ -31,13 +41,14 @@
 					               MaximumRows ="10" NumberOfSections="1">
 					</TableSettings>
 					<TableData PartListTopLeftPositionX ="0" PartListTopLeftPositionY ="0">
+						
 						<PartListColumns>
 							<PartListColumn Number="" HeaderText="" SourceType="" SourceValue=""/>
 							<PartListColumn Number="" HeaderText="" SourceType="" SourceValue=""/>
 							<PartListColumn Number="" HeaderText="" SourceType="" SourceValue=""/>
 						</PartListColumns>
 					</TableData>
-				</InputType>
+				</InputType>-->
 			</Division>
 		</Supplier>
 	</Oem>

@@ -11,8 +11,8 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
     {
         private CallOutDetailsReader()
         {
-            ReadCallOutDetails = XmlHelper.DeserializeXmlFileToObject<CalloutDetails>(System.IO.Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "CalloutDetails.xml"));
-            //ReadCallOutDetails.Update();
+            ReadCallOutDetails = XmlHelper.DeserializeXmlFileToObject<CalloutDetails>(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config", "CalloutDetails.xml"));
+            ReadCallOutDetails.Update();
         }
 
         private static CallOutDetailsReader _instance;
@@ -46,18 +46,16 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
         public InputType GetBalloonCallOutsDetails(string oem, string supplier, string division)
         {
             if (ReadCallOutDetails != null)
-            {   
-                var oems = ReadCallOutDetails.Oem.Where(a=>a.Name.Equals(oem,StringComparison.InvariantCultureIgnoreCase));
-                if (oems.Any())
+            {
+                if (ReadCallOutDetails.Data.ContainsKey(oem))
                 {
-                    var suppliers = oems.First().Supplier.Where(a => a.Name.Equals(supplier, StringComparison.InvariantCultureIgnoreCase));
-                    if (suppliers.Any())
+                    var suppliers = ReadCallOutDetails.Data[oem];
+                    if (suppliers.Data.ContainsKey(supplier))
                     {
-                        var divisions = suppliers.First().Division.Where(a => a.Name.Equals(division, StringComparison.InvariantCultureIgnoreCase));
-                        if (divisions.Any())
-                            return divisions.First().InputType[0];
-                        else
-                            LogWriter.LogWrite("Division is not available in the Config file");
+                        var divisions = suppliers.Data[supplier];
+                        if (divisions.Data.ContainsKey(division))
+                            return divisions.Data[division].InputType[0];
+                        LogWriter.LogWrite("Division is not available in the Config file");
                     }
                     else
                         LogWriter.LogWrite("Supplier is not available in the Config file");

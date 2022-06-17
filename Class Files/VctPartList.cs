@@ -15,7 +15,7 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
             if(StaticVariables.InventorOperations.UpdateSettings(filePath, CallOutDetails))
                 AddPartList();
             else
-                LogWriter.LogWrite("Unable to find for the Welded Assembly : " + filePath);
+                LogWriter.LogWrite("Unable to find for the Welded Assembly Drawing: " + filePath);
         }
         public InputType CallOutDetails { get; set; }
 
@@ -24,8 +24,9 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
             //Delete PartList
             StaticVariables.InventorOperations.DeletePartList();
 
+            //Get
             //Insert new PartList
-            StaticVariables.InventorOperations.PlacePartList(CallOutDetails.GeneralSettings.PartListType, CallOutDetails.TableData.PartListTopLeftPositionX, CallOutDetails.TableData.PartListTopLeftPositionY, CallOutDetails.TableSettings);
+            StaticVariables.InventorOperations.PlacePartList(CallOutDetails.GeneralSettings.PartListType, CallOutDetails.TableData, CallOutDetails.TableSettings);
 
             Process();
         }
@@ -34,7 +35,7 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
 
         public bool Process()
         {
-            if (StaticVariables.InventorOperations.IsPartslistPlaced)
+            if (StaticVariables.InventorOperations.IsPartsListPlaced)
             {
                 BalloonCallOuts = new VctBalloons();
             }

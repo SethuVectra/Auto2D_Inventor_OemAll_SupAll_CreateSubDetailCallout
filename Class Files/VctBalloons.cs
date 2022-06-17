@@ -25,7 +25,7 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
         {
             try
             {
-                BalloonCallouts = StaticVariables.InventorOperations.AddBallonToView();
+                BalloonCallouts = StaticVariables.InventorOperations.AddBalloonToView();
                 return true;
             }
             catch

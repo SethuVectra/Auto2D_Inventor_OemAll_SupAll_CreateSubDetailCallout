@@ -49,8 +49,8 @@ namespace Auto2D_Inventor_OemAll_SupAll_CreateSubDetailCallout.Class_Files
                     {
                         _ = new VctPartList(item.Tooltip, InputType);
                     }
-                    (((s as System.Windows.Controls.Button).Parent as System.Windows.Controls.Grid).Parent as
-                        System.Windows.Window).Close();
+                    (((s as System.Windows.Controls.Button)?.Parent as System.Windows.Controls.Grid)?.Parent as
+                        System.Windows.Window)?.Close();
                 };
                 drawings.ShowDialog();
             }
